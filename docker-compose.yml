@@ -1,12 +1,19 @@
 version: "3.9"
 
 services:
-  python-app:
+  app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./app
     ports:
-      - "9090:9090" # Mapeia a porta do contêiner para a porta local
+      - "5005:5005"
+      - "8501:8501"
+    container_name: app
     volumes:
-      - ./app:/app # Monta o código local para facilitar o desenvolvimento
-    container_name: python_app_container
+      - ./health_data.db:/app/health_data.db
+
+  playwright:
+    build:
+      context: ./playwright
+    depends_on:
+      - app
+    container_name: playwright
